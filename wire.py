@@ -10,13 +10,20 @@ import tempfile
 def main():
 
   pipes = {}
+  commands = []
 
+  # preprocess commands
   while True:
     try:
       line = raw_input()
-      command = process_line(line, sys.argv, pipes)
+      command = preprocess(line, sys.argv, pipes)
+      commands.append(command)
     except EOFError:
       break
+
+  # execute commands
+  for command in commands:
+    spawn(command)
 
   # delete temp dirs
   for name in pipes:
@@ -24,11 +31,9 @@ def main():
     shutil.rmtree( path[:-4] )    
 
 
-def process_line(line, args, pipes):
-  tokens = line.split()
-
+def preprocess(line, args, pipes):
   command = []
-  for token in tokens:
+  for token in line.split():
     first = token[0]
     name = token[1:]
     if first == '@':
@@ -43,8 +48,7 @@ def process_line(line, args, pipes):
         command.append(token)
     else:
         command.append(token)
-
-  spawn(command)
+  return command
 
 
 def new_pipe():

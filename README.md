@@ -1,7 +1,6 @@
 # wire
 
-Wire filters together
-
+Wire commands together
 
 ## Test
 
